@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ecommerce.DAL\ecommerce.DAL.csproj" />
+    <ProjectReference Include="..\ecommerce.Model\ecommerce.Model.csproj" />
+  </ItemGroup>
+
+</Project>
