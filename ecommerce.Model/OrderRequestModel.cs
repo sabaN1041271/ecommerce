@@ -19,7 +19,6 @@ namespace ecommerce.Model
         public int ProductId { get; set; }
         [JsonProperty]
         public int Quantity { get; set; }
-        [JsonProperty]
-        public double Price { get; set; }
+
     }
 }

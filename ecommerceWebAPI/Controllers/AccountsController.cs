@@ -22,11 +22,11 @@ namespace ecommerceWebAPI.Controllers
         [ProducesResponseType(typeof(PageWrapper<UserDetails>), 200)]
         [ProducesResponseType(typeof(void), 404)]
 
-        public async virtual Task<IActionResult> GetAllUsers([FromQuery] int page, [FromQuery] int perPage)
+        public async Task<IActionResult> GetAllUsers([FromQuery] int page, [FromQuery] int perPage)
         {
 
 
-            List<UserDetails> response = await this._accountsControllerBLLService.GetAllUsers();
+            List<UserDetails> response =  await this._accountsControllerBLLService.GetAllUsers();
 
 
             if (response == null)
@@ -47,10 +47,10 @@ namespace ecommerceWebAPI.Controllers
         [ProducesResponseType(typeof(UserDetails), 200)]
         [ProducesResponseType(typeof(void), 404)]
 
-        public async virtual Task<IActionResult> GetOrderById([FromRoute] int userId)
+        public IActionResult GetUserById([FromRoute] int userId)
         {
 
-            UserDetails response = await this._accountsControllerBLLService.GetUserById(userId);
+            UserDetails response =  this._accountsControllerBLLService.GetUserById(userId).Result;
 
 
             if (response == null)

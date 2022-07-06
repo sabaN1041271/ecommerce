@@ -28,7 +28,7 @@ namespace ecommerceWebAPI.Controllers
         {
 
 
-            PageWrapper<OrderDetailResponseModel> response = await this._orderControllerService.AllOrders(page, perPage, userId);
+            PageWrapper<OrderProductDetails> response = await this._orderControllerService.AllOrders(page, perPage, userId);
 
 
             if (response == null)
@@ -72,10 +72,10 @@ namespace ecommerceWebAPI.Controllers
         [ProducesResponseType(typeof(PageWrapper<OrderDetailResponseModel>), 200)]
         [ProducesResponseType(typeof(void), 404)]
 
-        public async virtual Task<IActionResult> SearchByOrderDate(DateTime dateFrom, DateTime dateTo, int userId)
+        public async virtual Task<IActionResult> SearchByOrderDate(DateTime dateFrom, DateTime dateTo, int userId, int page, int perPage)
         {
 
-            PageWrapper<OrderDetailResponseModel> response = await this._orderControllerService.GetOrdersByDate(dateFrom, dateTo, userId);
+            PageWrapper<OrderDetailResponseModel> response = await this._orderControllerService.GetOrdersByDate(dateFrom, dateTo, userId,page, perPage);
 
 
             if (response == null)

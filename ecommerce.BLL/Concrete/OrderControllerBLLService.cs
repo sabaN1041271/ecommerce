@@ -12,50 +12,108 @@ namespace ecommerce.BLL.Concrete
 {
     public class OrderControllerBLLService : IOrderControllerBLLService
     {
-        private readonly IOrderControllerDALService orderControllerDALService;
-        public Task<bool> AddCreditCardToAccount(CreditCardRequestModel creditCardRequestModel, int userId)
+        private readonly IOrderControllerDALService _orderControllerDALService;
+        public OrderControllerBLLService(IOrderControllerDALService orderControllerDALService)
         {
-            throw new NotImplementedException();
+            this._orderControllerDALService = orderControllerDALService;
+        }
+        public async Task<bool> AddCreditCardToAccount(CreditCardRequestModel creditCardRequestModel, int userId)
+        {
+            bool result = await this._orderControllerDALService.AddCreditCardToAccount(creditCardRequestModel.CardType, creditCardRequestModel.CardNumber, creditCardRequestModel.ExpiryMonth, creditCardRequestModel.ExpiryYear, creditCardRequestModel.Cvc, userId);
+            return result;
         }
 
-        public Task<bool> AddItemsToBasket(OrderRequestModel orderRequestModel, int userId)
+        public async Task<bool> AddItemsToBasket(OrderRequestModel orderRequestModel, int userId)
         {
-            throw new NotImplementedException();
+            bool result = await this._orderControllerDALService.AddItemsToBasket(orderRequestModel, userId);
+            return result;
         }
 
-        public Task<PageWrapper<OrderDetailResponseModel>> AllOrders(int page, int perPage, int userId)
+        public async Task<PageWrapper<OrderProductDetails>> AllOrders(int page, int perPage, int userId)
         {
-            throw new NotImplementedException();
+            var orders = await this._orderControllerDALService.AllOrders(userId);
+            var totalCount = orders.Count;
+            PageWrapper<OrderProductDetails> pageList = new PageWrapper<OrderProductDetails>
+            {
+                Items = orders.Skip((page - 1) * perPage)
+                .Take(perPage).ToList(),
+                PaginationInfo = new PaginationInfo
+                {
+                    Count = Convert.ToInt32(totalCount),
+                    Page = page,
+                    PerPage = perPage
+                }
+
+            };
+            return pageList;
         }
 
-        public Task<PageWrapper<CreditCardResponseModel>> GetAllSavedCreditCards(int page, int perPage, int userId)
+        public async Task<PageWrapper<CreditCardResponseModel>> GetAllSavedCreditCards(int page, int perPage, int userId)
         {
-            throw new NotImplementedException();
+            var cards = await this._orderControllerDALService.GetAllSavedCreditCards(userId);
+            var totalCount = cards.Count;
+            PageWrapper<CreditCardResponseModel> pageList = new PageWrapper<CreditCardResponseModel>
+            {
+                Items = cards.Skip((page - 1) * perPage)
+                .Take(perPage).ToList(),
+                PaginationInfo = new PaginationInfo
+                {
+                    Count = Convert.ToInt32(totalCount),
+                    Page = page,
+                    PerPage = perPage
+                }
+
+            };
+            return pageList;
         }
 
-        public Task<BasketResponseModel> GetItemsAddedToBasket(int userId)
+        public async Task<BasketResponseModel> GetItemsAddedToBasket(int userId)
         {
-            throw new NotImplementedException();
+            BasketResponseModel basket = await this._orderControllerDALService.GetItemsAddedToBasket(userId);
+          
+            return basket;
         }
 
-        public Task<OrderDetailResponseModel> GetOrderById(int userId, int orderId)
+        public async Task<OrderDetailResponseModel> GetOrderById(int userId, int orderId)
         {
-            throw new NotImplementedException();
+            OrderDetailResponseModel order = await this._orderControllerDALService.GetOrderById(userId,orderId);
+
+            return order;
         }
 
-        public Task<PageWrapper<OrderDetailResponseModel>> GetOrdersByDate(DateTime dateFrom, DateTime dateTo, int userId)
+        public async Task<PageWrapper<OrderDetailResponseModel>> GetOrdersByDate(DateTime dateFrom, DateTime dateTo, int userId, int page, int perPage)
         {
-            throw new NotImplementedException();
+            var orders = await this._orderControllerDALService.GetOrdersByDate(dateFrom, dateTo, userId);
+            var totalCount = orders.Count;
+            PageWrapper<OrderDetailResponseModel> pageList = new PageWrapper<OrderDetailResponseModel>
+            {
+                Items = orders
+                .Skip((page - 1) * perPage)
+                .Take(perPage).ToList(),
+                PaginationInfo = new PaginationInfo
+                {
+                    Count = Convert.ToInt32(totalCount),
+                    Page = page,
+                    PerPage = perPage
+                }
+
+            };
+            return pageList;
         }
 
-        public Task<bool> PlaceOrder(OrderRequestModel orderRequestModel, int userId, int cardId)
+
+        public async Task<bool> PlaceOrder(OrderRequestModel orderRequestModel, int userId, int cardId)
         {
-            throw new NotImplementedException();
+            bool orderPlaced = await this._orderControllerDALService.PlaceOrder(orderRequestModel,userId, cardId);
+
+            return orderPlaced;
         }
 
-        public Task<bool> UpdateItemsInBasket(ItemsToUpdateRequestModel itemsRequestModel, int userId)
+        public async Task<bool> UpdateItemsInBasket(ItemsToUpdateRequestModel itemsRequestModel, int userId)
         {
-            throw new NotImplementedException();
+            bool orderPlaced = await this._orderControllerDALService.UpdateItemsInBasket(itemsRequestModel, userId);
+
+            return orderPlaced;
         }
     }
 }

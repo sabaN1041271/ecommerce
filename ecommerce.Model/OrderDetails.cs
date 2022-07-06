@@ -12,8 +12,9 @@ namespace ecommerce.Model
         [JsonProperty]
         public int Id { get; set; }
         [JsonProperty]
-        public int OrderId { get; set; } 
-
+        public int OrderId { get; set; }
+        [JsonProperty]
+        public DateTime OrderDate { get; set; }
         [JsonProperty]
         public List<ProductsAdded> ProductDetails { get; set; }      
 
@@ -23,6 +24,8 @@ namespace ecommerce.Model
     {
         [JsonProperty]
         public int ProductId { get; set; }
+        [JsonProperty]
+        public string ProductName { get; set; }
         [JsonProperty]
         public int ProductQuantity { get; set; }
         [JsonProperty]
