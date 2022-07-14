@@ -25,6 +25,7 @@ namespace ecommerce.Model
     public enum PaymentStatusEnum
     {
         successful,
+        pending,
         failed
     }
 }

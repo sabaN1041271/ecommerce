@@ -10,6 +10,6 @@ namespace ecommerce.Model
     public class ItemsToUpdateRequestModel
     {
         [JsonProperty]
-        public List<ItemsToAddRequestModel> itemDetails { get; set; }
+        public ItemsToAddRequestModel itemDetails { get; set; }
     }
 }

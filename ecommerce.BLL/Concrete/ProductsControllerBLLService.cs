@@ -1,4 +1,5 @@
 ﻿using ecommerce.BLL.Abstract;
+using ecommerce.DAL.Abstract;
 using ecommerce.Model;
 using System;
 using System.Collections.Generic;
@@ -10,19 +11,55 @@ namespace ecommerce.BLL.Concrete
 {
     public class ProductsControllerBLLService : IProductsControllerBLLService
     {
-        public Task<PageWrapper<ProductDetails>> AllProducts(int page, int perPage)
+        private readonly IProductsControllerDALService _productControllerDALService;
+        public ProductsControllerBLLService(IProductsControllerDALService productControllerDALService)
         {
-            throw new NotImplementedException();
+            this._productControllerDALService = productControllerDALService;
+        }
+        public async Task<PageWrapper<ProductDetails>> AllProducts(int page, int perPage)
+        {
+            List<ProductDetails> products = await this._productControllerDALService.AllProducts();
+            var totalCount = products.Count;
+            PageWrapper<ProductDetails> pageList = new PageWrapper<ProductDetails>
+            {
+                Items = products.Skip((page - 1) * perPage)
+                .Take(perPage).ToList(),
+                PaginationInfo = new PaginationInfo
+                {
+                    Count = Convert.ToInt32(totalCount),
+                    Page = page,
+                    PerPage = perPage
+                }
+
+            };
+            return pageList;
         }
 
-        public Task<ProductDetails> GetProductById(int productId)
+        public async Task<ProductDetails> GetProductById(int productId)
         {
-            throw new NotImplementedException();
+            ProductDetails product = await this._productControllerDALService.GetProductById(productId);
+
+            return product;
         }
 
-        public Task<PageWrapper<ProductDetails>> GetProductByProductName(string query)
+        public async Task<PageWrapper<ProductDetails>> GetProductByProductName(string query, int page = 1, int perPage = int.MaxValue)
         {
-            throw new NotImplementedException();
+            List<ProductDetails> products = await this._productControllerDALService.GetProductByProductName(query);
+
+            var totalCount = products.Count;
+            PageWrapper<ProductDetails> pageList = new PageWrapper<ProductDetails>
+            {
+                Items = products.Skip((page - 1) * perPage)
+                .Take(perPage).ToList(),
+                PaginationInfo = new PaginationInfo
+                {
+                    Count = Convert.ToInt32(totalCount),
+                    Page = page,
+                    PerPage = perPage
+                }
+
+            };
+            return pageList;
         }
     }
 }

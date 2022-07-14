@@ -48,11 +48,11 @@ namespace ecommerce.BLL.Concrete
             return pageList;
         }
 
-        public async Task<PageWrapper<CreditCardResponseModel>> GetAllSavedCreditCards(int page, int perPage, int userId)
+        public async Task<PageWrapper<CreditCard>> GetAllSavedCreditCards(int page, int perPage, int userId)
         {
             var cards = await this._orderControllerDALService.GetAllSavedCreditCards(userId);
             var totalCount = cards.Count;
-            PageWrapper<CreditCardResponseModel> pageList = new PageWrapper<CreditCardResponseModel>
+            PageWrapper<CreditCard> pageList = new PageWrapper<CreditCard>
             {
                 Items = cards.Skip((page - 1) * perPage)
                 .Take(perPage).ToList(),
@@ -67,25 +67,25 @@ namespace ecommerce.BLL.Concrete
             return pageList;
         }
 
-        public async Task<BasketResponseModel> GetItemsAddedToBasket(int userId)
+        public async Task<BasketDetails> GetItemsAddedToBasket(int userId)
         {
-            BasketResponseModel basket = await this._orderControllerDALService.GetItemsAddedToBasket(userId);
+            BasketDetails basket = await this._orderControllerDALService.GetItemsAddedToBasket(userId);
           
             return basket;
         }
 
-        public async Task<OrderDetailResponseModel> GetOrderById(int userId, int orderId)
+        public async Task<OrderProductDetails> GetOrderById(int userId, int orderId)
         {
-            OrderDetailResponseModel order = await this._orderControllerDALService.GetOrderById(userId,orderId);
+            OrderProductDetails order = await this._orderControllerDALService.GetOrderById(userId,orderId);
 
             return order;
         }
 
-        public async Task<PageWrapper<OrderDetailResponseModel>> GetOrdersByDate(DateTime dateFrom, DateTime dateTo, int userId, int page, int perPage)
+        public async Task<PageWrapper<OrderProductDetails>> GetOrdersByDate(DateTime dateFrom, DateTime dateTo, int userId, int page, int perPage)
         {
             var orders = await this._orderControllerDALService.GetOrdersByDate(dateFrom, dateTo, userId);
             var totalCount = orders.Count;
-            PageWrapper<OrderDetailResponseModel> pageList = new PageWrapper<OrderDetailResponseModel>
+            PageWrapper<OrderProductDetails> pageList = new PageWrapper<OrderProductDetails>
             {
                 Items = orders
                 .Skip((page - 1) * perPage)
@@ -109,7 +109,7 @@ namespace ecommerce.BLL.Concrete
             return orderPlaced;
         }
 
-        public async Task<bool> UpdateItemsInBasket(ItemsToUpdateRequestModel itemsRequestModel, int userId)
+        public async Task<bool> UpdateItemsInBasket(ItemsToAddRequestModel itemsRequestModel, int userId)
         {
             bool orderPlaced = await this._orderControllerDALService.UpdateItemsInBasket(itemsRequestModel, userId);
 

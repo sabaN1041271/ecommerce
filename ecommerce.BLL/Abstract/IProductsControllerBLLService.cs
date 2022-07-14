@@ -11,6 +11,6 @@ namespace ecommerce.BLL.Abstract
     {
         Task<PageWrapper<ProductDetails>> AllProducts(int page, int perPage);
         Task<ProductDetails> GetProductById(int productId);
-        Task<PageWrapper<ProductDetails>> GetProductByProductName(string query);
+        Task<PageWrapper<ProductDetails>> GetProductByProductName(string query, int page = 1, int perPage = int.MaxValue);
     }
 }

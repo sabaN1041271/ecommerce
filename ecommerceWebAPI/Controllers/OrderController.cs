@@ -52,7 +52,7 @@ namespace ecommerceWebAPI.Controllers
         public async virtual Task<IActionResult> GetOrderById([FromRoute] int orderId, [FromRoute] int userId)
         {
 
-            OrderDetailResponseModel response = await this._orderControllerService.GetOrderById(userId,orderId);
+            OrderProductDetails response = await this._orderControllerService.GetOrderById(userId,orderId);
 
 
             if (response == null)
@@ -75,7 +75,7 @@ namespace ecommerceWebAPI.Controllers
         public async virtual Task<IActionResult> SearchByOrderDate(DateTime dateFrom, DateTime dateTo, int userId, int page, int perPage)
         {
 
-            PageWrapper<OrderDetailResponseModel> response = await this._orderControllerService.GetOrdersByDate(dateFrom, dateTo, userId,page, perPage);
+            PageWrapper<OrderProductDetails> response = await this._orderControllerService.GetOrdersByDate(dateFrom, dateTo, userId,page, perPage);
 
 
             if (response == null)
@@ -122,7 +122,7 @@ namespace ecommerceWebAPI.Controllers
         public async virtual Task<IActionResult> GetItemsAddedToBasket(int userId)
         {
 
-            BasketResponseModel response = await this._orderControllerService.GetItemsAddedToBasket(userId);
+            BasketDetails response = await this._orderControllerService.GetItemsAddedToBasket(userId);
 
 
             if (response == null)
@@ -143,7 +143,7 @@ namespace ecommerceWebAPI.Controllers
         [ProducesResponseType(typeof(bool), 200)]
         [ProducesResponseType(typeof(void), 404)]
 
-        public async virtual Task<IActionResult> UpdateItemsInBasket(ItemsToUpdateRequestModel itemsRequestModel, int userId)
+        public async virtual Task<IActionResult> UpdateItemsInBasket(ItemsToAddRequestModel itemsRequestModel, int userId)
         {
 
             bool response = await this._orderControllerService.UpdateItemsInBasket(itemsRequestModel, userId);
