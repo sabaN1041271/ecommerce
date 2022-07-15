@@ -194,7 +194,7 @@ namespace ecommerceWebAPI.Controllers
         public async virtual Task<IActionResult> GetAllSavedCreditCards([FromQuery] int page, [FromQuery] int perPage, [FromQuery] int userId)
         {
 
-            PageWrapper<CreditCardResponseModel> response = await this._orderControllerService.GetAllSavedCreditCards(page, perPage, userId);
+            PageWrapper<CreditCard> response = await this._orderControllerService.GetAllSavedCreditCards(page, perPage, userId);
 
 
             if (response == null)

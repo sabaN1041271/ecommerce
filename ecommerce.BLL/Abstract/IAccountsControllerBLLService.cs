@@ -9,7 +9,7 @@ namespace ecommerce.BLL.Abstract
 {
     public interface IAccountsControllerBLLService
     {
-        Task<List<UserDetails>> GetAllUsers();
+        Task<PageWrapper<UserDetails>> GetAllUsers(int page = 1, int perPage = int.MaxValue);
         Task<UserDetails> GetUserById(int userId);
     }
 }

@@ -26,7 +26,7 @@ namespace ecommerceWebAPI.Controllers
         {
 
 
-            List<UserDetails> response =  await this._accountsControllerBLLService.GetAllUsers();
+            PageWrapper<UserDetails> response =  await this._accountsControllerBLLService.GetAllUsers();
 
 
             if (response == null)
@@ -47,7 +47,7 @@ namespace ecommerceWebAPI.Controllers
         [ProducesResponseType(typeof(UserDetails), 200)]
         [ProducesResponseType(typeof(void), 404)]
 
-        public IActionResult GetUserById([FromRoute] int userId)
+        public async Task<IActionResult> GetUserById([FromRoute] int userId)
         {
 
             UserDetails response =  this._accountsControllerBLLService.GetUserById(userId).Result;

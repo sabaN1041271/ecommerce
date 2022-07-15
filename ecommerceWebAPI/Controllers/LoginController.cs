@@ -23,10 +23,10 @@ namespace ecommerceWebAPI.Controllers
         {
             bool unauthorised = false;
             string pass = PasswordEncryption.EncodePasswordToBase64(userCredentials.password);
-            List<UserDetails> userList = new List<UserDetails>();
+            PageWrapper<UserDetails> userList = new PageWrapper<UserDetails>();
             userList = await this._accountsControllerBLLService.GetAllUsers();
 
-            foreach (var user in userList)
+            foreach (var user in userList.Items)
             {
                 if (user.Email.Equals(userCredentials.email))
                 {

@@ -17,12 +17,24 @@ namespace ecommerce.BLL.Concrete
         {
             this._accountsControllerDALService = accountsControllerDALService;
         }
-        public async Task<List<UserDetails>> GetAllUsers()
+        public async Task<PageWrapper<UserDetails>> GetAllUsers(int page = 1, int perPage = int.MaxValue)
         {
             List<UserDetails> users = new List<UserDetails>();
             users = await this._accountsControllerDALService.GetAllUsers();
-           
-            return users;
+            var totalCount = users.Count;
+            PageWrapper<UserDetails> pageList = new PageWrapper<UserDetails>
+            {
+                Items = users.Skip((page - 1) * perPage)
+                .Take(perPage).ToList(),
+                PaginationInfo = new PaginationInfo
+                {
+                    Count = Convert.ToInt32(totalCount),
+                    Page = page,
+                    PerPage = perPage
+                }
+
+            };
+            return pageList;
         }
 
       

@@ -20,22 +20,7 @@ namespace ecommerce.DAL.Concrete
             try
 
             {
-
-                con = new SqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ToString());
-
-                SqlCommand cmd = new SqlCommand("Get_All_Users", con);
-
-                cmd.CommandType = CommandType.StoredProcedure;
-                               
-                con.Open();
-
-                SqlDataAdapter da = new SqlDataAdapter();
-
-                da.SelectCommand = cmd;
-
-                DataSet ds = new DataSet();
-
-                da.Fill(ds);
+                DataSet ds = GetUsers();
 
                 DataTable dt_users = ds.Tables[0];
                 DataTable dt_users_addresses = ds.Tables[1];
@@ -53,7 +38,7 @@ namespace ecommerce.DAL.Concrete
                              Addresses = GetUserAddresses(dt_users_addresses, Convert.ToInt32(dr["pkUserId"]))
 
                          }).ToList();
-              
+
             }
             catch (Exception ex)
             {
@@ -64,6 +49,26 @@ namespace ecommerce.DAL.Concrete
                 con.Close();
             }
             return Task.FromResult(users);
+        }
+
+        public DataSet GetUsers()
+        {
+            con = new SqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ToString());
+
+            SqlCommand cmd = new SqlCommand("Get_All_Users", con);
+
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            con.Open();
+
+            SqlDataAdapter da = new SqlDataAdapter();
+
+            da.SelectCommand = cmd;
+
+            DataSet ds = new DataSet();
+
+            da.Fill(ds);
+            return ds;
         }
 
         private List<AddressDetails> GetUserAddresses(DataTable dt_users_addresses, int userId)
@@ -85,27 +90,13 @@ namespace ecommerce.DAL.Concrete
 
             {
 
-                con = new SqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ToString());
-
-                SqlCommand cmd = new SqlCommand("GET_USER_BY_ID", con);
-
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@userId", userId);
-
-                con.Open();
-
-                SqlDataAdapter da = new SqlDataAdapter();
-
-                da.SelectCommand = cmd;
-
-                DataSet ds = new DataSet();
-
-                da.Fill(ds);
+                DataSet ds = GetUsers();
 
                 DataTable dt_users = ds.Tables[0];
                 DataTable dt_users_addresses = ds.Tables[1];
 
                 userDetails = (from DataRow dr in dt_users.Rows
+                               where Convert.ToInt32(dr["pkUserId"]) == userId
                                select new UserDetails()
                                {
                                    Id = Convert.ToInt32(dr["pkUserId"]),
