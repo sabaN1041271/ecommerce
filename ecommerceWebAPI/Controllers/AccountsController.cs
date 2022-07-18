@@ -26,7 +26,7 @@ namespace ecommerceWebAPI.Controllers
         {
 
 
-            PageWrapper<UserDetails> response =  await this._accountsControllerBLLService.GetAllUsers();
+            PageWrapper<UserDetails> response =  await this._accountsControllerBLLService.GetAllUsers(page, perPage);
 
 
             if (response == null)

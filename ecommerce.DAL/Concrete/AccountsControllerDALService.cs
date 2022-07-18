@@ -13,7 +13,9 @@ namespace ecommerce.DAL.Concrete
 {
     public class AccountsControllerDALService : IAccountsControllerDALService
     {
+        ConnectionStringManager connectionStringManager;
         SqlConnection con = null;
+       
         public Task<List<UserDetails>> GetAllUsers()
         {
             List<UserDetails> users = new List<UserDetails>();
@@ -32,7 +34,7 @@ namespace ecommerce.DAL.Concrete
                              FirstName = dr["firstName"].ToString(),
                              LastName = dr["lastName"].ToString(),
                              MobileNumber = dr["mobileNumber"].ToString(),
-                             gender = Convert.ToChar(dr["gender"]) == 'M' ? "Male" : "Female",
+                             gender = Convert.ToChar(dr["gender"].ToString().Trim()) == 'M' ? "Male" : "Female",
                              Email = dr["email"].ToString(),
                              Password = dr["password"].ToString(),
                              Addresses = GetUserAddresses(dt_users_addresses, Convert.ToInt32(dr["pkUserId"]))
@@ -53,7 +55,8 @@ namespace ecommerce.DAL.Concrete
 
         public DataSet GetUsers()
         {
-            con = new SqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ToString());
+            connectionStringManager = new ConnectionStringManager();
+            con = new SqlConnection(connectionStringManager.GetConnectionString());
 
             SqlCommand cmd = new SqlCommand("Get_All_Users", con);
 
@@ -103,7 +106,7 @@ namespace ecommerce.DAL.Concrete
                                    FirstName = dr["firstName"].ToString(),
                                    LastName = dr["lastName"].ToString(),
                                    MobileNumber = dr["mobileNumber"].ToString(),
-                                   gender = Convert.ToChar(dr["gender"]) == 'M' ? "Male" : "Female",
+                                   gender = Convert.ToChar(dr["gender"].ToString().Trim()) == 'M' ? "Male" : "Female",
                                    Email = dr["email"].ToString(),
                                    Password = dr["password"].ToString(),
                                    Addresses = GetUserAddresses(dt_users_addresses, Convert.ToInt32(dr["pkUserId"]))

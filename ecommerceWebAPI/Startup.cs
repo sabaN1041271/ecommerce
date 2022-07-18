@@ -1,3 +1,7 @@
+using ecommerce.BLL.Abstract;
+using ecommerce.BLL.Concrete;
+using ecommerce.DAL.Abstract;
+using ecommerce.DAL.Concrete;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,6 +40,15 @@ namespace ecommerceWebAPI
                 options.Authority = "https://dev-lux04xv2.us.auth0.com/";
                 options.Audience = "https://ecommerce-api/";
             });
+
+            services.AddScoped<IAccountsControllerBLLService, AccountsControllerBLLService>();
+            services.AddScoped<IAccountsControllerDALService, AccountsControllerDALService>();
+            services.AddScoped<IOrderControllerBLLService, OrderControllerBLLService>();
+            services.AddScoped<IOrderControllerDALService, OrderControllerDALService>();
+            services.AddScoped<IProductsControllerBLLService, ProductsControllerBLLService>();
+            services.AddScoped<IProductsControllerDALService, ProductsControllerDALService>();
+
+
 
             services.AddControllers();
          

@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace ecommerceWebAPI.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
@@ -49,7 +48,7 @@ namespace ecommerceWebAPI.Controllers
         [ProducesResponseType(typeof(OrderDetailResponseModel), 200)]
         [ProducesResponseType(typeof(void), 404)]
 
-        public async virtual Task<IActionResult> GetOrderById([FromRoute] int orderId, [FromRoute] int userId)
+        public async virtual Task<IActionResult> GetOrderById([FromRoute] int orderId, [FromQuery] int userId)
         {
 
             OrderProductDetails response = await this._orderControllerService.GetOrderById(userId,orderId);

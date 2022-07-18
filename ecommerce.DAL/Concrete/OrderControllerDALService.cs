@@ -14,14 +14,15 @@ namespace ecommerce.DAL.Concrete
     public class OrderControllerDALService : IOrderControllerDALService
     {
         SqlConnection con;
+        ConnectionStringManager connectionStringManager;
         public Task<bool> AddCreditCardToAccount(string cardType, string cardNumber, int expiryMonth, int expiryYear, int cvc, int userId)
         {
             string result = string.Empty;
             try
 
             {
-
-                con = new SqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ToString());
+                connectionStringManager = new ConnectionStringManager();
+                con = new SqlConnection(connectionStringManager.GetConnectionString());
 
                 SqlCommand cmd = new SqlCommand("ADD_CREDIT_CARD_TO_USER_ACCOUNT", con);
 
@@ -34,7 +35,7 @@ namespace ecommerce.DAL.Concrete
                 cmd.Parameters.AddWithValue("@cvc", cvc);
 
                 con.Open();
-                result = cmd.ExecuteScalar().ToString();
+                result = cmd.ExecuteNonQuery().ToString();
                
             }
             catch(Exception ex)
@@ -62,7 +63,8 @@ namespace ecommerce.DAL.Concrete
 
             {
 
-                con = new SqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ToString());
+               connectionStringManager = new ConnectionStringManager();
+                con = new SqlConnection(connectionStringManager.GetConnectionString());
 
                 SqlCommand cmd = new SqlCommand("ADD_ITEMS_TO_BASKET", con);
 
@@ -72,7 +74,7 @@ namespace ecommerce.DAL.Concrete
                 cmd.Parameters.AddWithValue("@quantity", orderRequestModel.itemDetails.FirstOrDefault().Quantity);
 
                 con.Open();
-                result = cmd.ExecuteScalar().ToString();
+                result = cmd.ExecuteNonQuery().ToString();
 
             }
             catch (Exception ex)
@@ -100,7 +102,8 @@ namespace ecommerce.DAL.Concrete
 
             {
 
-                con = new SqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ToString());
+               connectionStringManager = new ConnectionStringManager();
+                con = new SqlConnection(connectionStringManager.GetConnectionString());
 
                 SqlCommand cmd = new SqlCommand("Get_All_Orders", con);
 
@@ -125,7 +128,7 @@ namespace ecommerce.DAL.Concrete
                          {
                              OrderId = Convert.ToInt32(dr["pkOrderId"]),
                              OrderDate = Convert.ToDateTime(dr["orderDate"]),
-                             ProductDetails = GetProducts(dt_products, Convert.ToInt32(dr["pkUserId"]), Convert.ToInt32(dr["pkOrderId"]))
+                             ProductDetails = GetProducts(dt_products, Convert.ToInt32(dr["userId"]), Convert.ToInt32(dr["pkOrderId"]))
                          }).ToList();
 
                           
@@ -183,7 +186,8 @@ namespace ecommerce.DAL.Concrete
 
             {
 
-                con = new SqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ToString());
+               connectionStringManager = new ConnectionStringManager();
+                con = new SqlConnection(connectionStringManager.GetConnectionString());
 
                 SqlCommand cmd = new SqlCommand("Get_All_Saved_Credit_Cards", con);
 
@@ -232,7 +236,8 @@ namespace ecommerce.DAL.Concrete
 
             {
 
-                con = new SqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ToString());
+               connectionStringManager = new ConnectionStringManager();
+                con = new SqlConnection(connectionStringManager.GetConnectionString());
 
                 SqlCommand cmd = new SqlCommand("Get_Items_In_Basket", con);
 
@@ -260,7 +265,7 @@ namespace ecommerce.DAL.Concrete
                           {
                               BasketId = Convert.ToInt32(dr["pkBasketId"]),
                               UserId = Convert.ToInt32(dr["userId"]),
-                              ProductsAddeds = GetProducts(dt_products, Convert.ToInt32(dr["pkUserId"]), Convert.ToInt32(dr["pkBasketId"]))
+                              ProductsAddeds = GetProducts(dt_products, Convert.ToInt32(dr["userId"]), 0,Convert.ToInt32(dr["pkBasketId"]))
                           }).FirstOrDefault();
 
 
@@ -283,7 +288,8 @@ namespace ecommerce.DAL.Concrete
 
             {
 
-                con = new SqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ToString());
+               connectionStringManager = new ConnectionStringManager();
+                con = new SqlConnection(connectionStringManager.GetConnectionString());
 
                 SqlCommand cmd = new SqlCommand("Get_All_Orders", con);
 
@@ -309,7 +315,7 @@ namespace ecommerce.DAL.Concrete
                          {
                              OrderId = Convert.ToInt32(dr["pkOrderId"]),
                              OrderDate = Convert.ToDateTime(dr["orderDate"]),
-                             ProductDetails = GetProducts(dt_products, Convert.ToInt32(dr["pkUserId"]), Convert.ToInt32(dr["pkOrderId"]))
+                             ProductDetails = GetProducts(dt_products, Convert.ToInt32(dr["userId"]), Convert.ToInt32(dr["pkOrderId"]))
                          }).FirstOrDefault();
 
 
@@ -332,7 +338,8 @@ namespace ecommerce.DAL.Concrete
 
             {
 
-                con = new SqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ToString());
+               connectionStringManager = new ConnectionStringManager();
+                con = new SqlConnection(connectionStringManager.GetConnectionString());
 
                 SqlCommand cmd = new SqlCommand("Get_All_Orders", con);
 
@@ -358,7 +365,7 @@ namespace ecommerce.DAL.Concrete
                           {
                               OrderId = Convert.ToInt32(dr["pkOrderId"]),
                               OrderDate = Convert.ToDateTime(dr["orderDate"]),
-                              ProductDetails = GetProducts(dt_products, Convert.ToInt32(dr["pkUserId"]), Convert.ToInt32(dr["pkOrderId"]))
+                              ProductDetails = GetProducts(dt_products, Convert.ToInt32(dr["userId"]), Convert.ToInt32(dr["pkOrderId"]))
                           }).ToList();
 
 
@@ -397,7 +404,8 @@ namespace ecommerce.DAL.Concrete
                     }
                 }
 
-                con = new SqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ToString());
+               connectionStringManager = new ConnectionStringManager();
+                con = new SqlConnection(connectionStringManager.GetConnectionString());
 
                 SqlCommand cmd = new SqlCommand("Place_Order", con);
 
@@ -405,6 +413,7 @@ namespace ecommerce.DAL.Concrete
                 cmd.Parameters.AddWithValue("@userId", userId);
                 cmd.Parameters.AddWithValue("@orderDate", DateTime.Now);
                 cmd.Parameters.AddWithValue("@productDetails", dt_products);
+                cmd.Parameters.AddWithValue("@cardId", cardId);
 
                 con.Open();
 
@@ -435,7 +444,8 @@ namespace ecommerce.DAL.Concrete
 
             {
 
-                con = new SqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ToString());
+               connectionStringManager = new ConnectionStringManager();
+                con = new SqlConnection(connectionStringManager.GetConnectionString());
 
                 SqlCommand cmd = new SqlCommand("Update_Items_In_Basket", con);
 
@@ -443,7 +453,6 @@ namespace ecommerce.DAL.Concrete
                 cmd.Parameters.AddWithValue("@userId", userId);
                 cmd.Parameters.AddWithValue("@productId", itemsRequestModel.ProductId);
                 cmd.Parameters.AddWithValue("@quantity", itemsRequestModel.Quantity);
-                cmd.Parameters.AddWithValue("@orderDate", DateTime.Now);
 
                 con.Open();
 

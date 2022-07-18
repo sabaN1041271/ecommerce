@@ -14,6 +14,7 @@ namespace ecommerce.DAL.Concrete
     public class ProductsControllerDALService : IProductsControllerDALService
     {
         SqlConnection con;
+        ConnectionStringManager connectionStringManager;
         public Task<List<ProductDetails>> AllProducts()
         {
             List<ProductDetails> products = new List<ProductDetails>();
@@ -21,7 +22,8 @@ namespace ecommerce.DAL.Concrete
 
             {
 
-                con = new SqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ToString());
+               connectionStringManager = new ConnectionStringManager();
+                con = new SqlConnection(connectionStringManager.GetConnectionString());
 
                 SqlCommand cmd = new SqlCommand("Get_All_Products", con);
 
@@ -72,7 +74,8 @@ namespace ecommerce.DAL.Concrete
 
             {
 
-                con = new SqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ToString());
+               connectionStringManager = new ConnectionStringManager();
+                con = new SqlConnection(connectionStringManager.GetConnectionString());
 
                 SqlCommand cmd = new SqlCommand("Get_All_Products", con);
 
@@ -124,7 +127,8 @@ namespace ecommerce.DAL.Concrete
 
             {
 
-                con = new SqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ToString());
+               connectionStringManager = new ConnectionStringManager();
+                con = new SqlConnection(connectionStringManager.GetConnectionString());
 
                 SqlCommand cmd = new SqlCommand("Get_Product_By_Name", con);
 

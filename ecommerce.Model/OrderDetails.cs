@@ -9,7 +9,7 @@ namespace ecommerce.Model
 {
     public class OrderProductDetails
     {
-        [JsonProperty]
+        [JsonIgnore]
         public int Id { get; set; }
         [JsonProperty]
         public int OrderId { get; set; }
