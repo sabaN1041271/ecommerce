@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'ecommerce-saba'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FA92B43F918A42B6B13E96A16C881E68 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_785BA715827D4999A46350F550626741 }}
           package: .
