@@ -1,0 +1,82 @@
+name: ecommerce_$(Date:yyyyMMdd)$(Rev:r)
+
+trigger:
+- none
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  solution: '**\*.sln'
+
+stages:
+  - stage: Build
+    jobs:
+      - job: Build
+        displayName: Build the application and run unit test cases
+        steps:         
+        - task: NuGetToolInstaller@1
+          displayName: Install nuget tools
+
+        - task: NuGetCommand@2
+          displayName: Nuget restore packages
+          inputs:
+            command: 'restore'
+            restoreSolution: '$(solution)'
+            feedsToUse: 'config'
+
+        - task: VSBuild@1
+          displayName: Build the project
+          inputs:
+            solution: '$(solution)'
+            msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
+            platform: '$(buildPlatform)'
+            configuration: '$(buildConfiguration)'
+
+        - task: VSTest@2
+          displayName: Run unit tests
+          inputs:
+            testSelector: 'testAssemblies'
+            testAssemblyVer2: |
+              **\*test*.dll
+              !**\*TestAdapter.dll
+              !**\obj\**
+            searchFolder: '$(System.DefaultWorkingDirectory)'
+            runTestsInIsolation: true
+            codeCoverageEnabled: true
+            platform: '$(buildPlatform)'
+            configuration: '$(buildConfiguration)'
+
+        - task: PublishTestResults@2
+          displayName: Publish test results if all tests are succeeded
+          inputs:
+            testResultsFormat: 'NUnit'
+            testResultsFiles: '**/TEST-*.xml'
+            failTaskOnFailedTests: true        
+
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'
+
+  - stage: DeployOnStaging
+    displayName: Deploy the application for endpoint testing with masked prod database
+    jobs:
+      - job: Deploy
+        steps:
+           
+        - task: DownloadBuildArtifacts@0
+          inputs:
+            buildType: 'current'
+            downloadType: 'specific'
+            downloadPath: '$(System.ArtifactsDirectory)'
+          
+        
+
+
+
+
+        
